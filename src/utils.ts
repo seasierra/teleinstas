@@ -1,4 +1,4 @@
-export function isValidURL(string) {
+export function isValidURL(string: string) {
   try {
     new URL(string);
     return true;
