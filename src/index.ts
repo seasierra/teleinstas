@@ -4,12 +4,24 @@ import { message } from 'telegraf/filters';
 
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { development, production } from './core';
+import { ensureWebhook } from './core/webhook';
 import { isValidURL } from './utils';
 
 const BOT_TOKEN = process.env.BOT_TOKEN || '';
 const ENVIRONMENT = process.env.NODE_ENV || '';
 
 const bot = new Telegraf(BOT_TOKEN);
+
+if (ENVIRONMENT === 'production') {
+  ensureWebhook(bot);
+}
+
+bot.telegram.setMyCommands([
+  { command: 'start', description: 'Start the bot' },
+  { command: 'reset', description: 'Reset all subscriptions' },
+  { command: 'remove', description: 'Remove a subscription' },
+  { command: 'subscriptions', description: 'List all subscriptions' },
+]);
 
 bot.command('start', async (ctx) => {
   const subs = await kv.scard(`urls:${ctx.message.from.id}`);
@@ -46,7 +58,6 @@ bot.on(message('text'), async (ctx) => {
 
     if (!urlExists) {
       await kv.sadd(`urls:${ctx.message.from.id}`, ctx.message.text);
-      console.log(ctx.message.from.id);
 
       ctx.reply('Account added to your subscriptions.');
     } else {
