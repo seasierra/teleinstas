@@ -20,7 +20,6 @@ const production = async (
   } else {
     res.status(200).json('Listening to bot events...');
   }
-  debug(`starting webhook on port: ${PORT}`);
 
   await bot.launch();
 };
