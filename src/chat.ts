@@ -18,10 +18,6 @@ const ENVIRONMENT = process.env.NODE_ENV || '';
 const bot = new Telegraf(BOT_TOKEN);
 const openai = new OpenAI();
 
-if (ENVIRONMENT === 'production') {
-  ensureWebhook(bot);
-}
-
 let messages: ChatCompletionMessageParam[] = [];
 
 const msgIndex: Record<string, ChatCompletionMessageParam[]> = {};
