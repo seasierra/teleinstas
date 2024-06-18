@@ -15,8 +15,6 @@ const production = async (
 ) => {
   debug('Bot runs in production mode');
 
-  ensureWebhook(bot);
-
   if (req.method === 'POST') {
     await bot.handleUpdate(req.body as unknown as Update, res);
   } else {

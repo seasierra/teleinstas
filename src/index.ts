@@ -14,10 +14,6 @@ const ENVIRONMENT = process.env.NODE_ENV || '';
 
 const bot = new Telegraf(BOT_TOKEN);
 
-if (ENVIRONMENT === 'production') {
-  ensureWebhook(bot);
-}
-
 bot.telegram.setMyCommands([
   { command: 'start', description: 'Start the bot' },
   { command: 'reset', description: 'Reset all subscriptions' },
