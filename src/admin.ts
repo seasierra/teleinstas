@@ -103,9 +103,10 @@ export const sendAdmin = async (text: string) => {
 //   }
 // });
 
-//prod mode (Vercel)
-export const startVercel = async (req: VercelRequest, res: VercelResponse) => {
-  await production(req, res, bot);
-};
-//dev mode
-ENVIRONMENT !== 'production' && development(bot);
+if (process.env.NODE_ENV === 'production') {
+  production(bot);
+}
+
+if (process.env.NODE_ENV === 'development') {
+  development(bot);
+}

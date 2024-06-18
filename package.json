@@ -33,7 +33,7 @@
     "dev:chat": "DEBUG=bot* dotenv -- bun run --watch src/chat.ts",
     "dev:admin": "DEBUG=bot* dotenv -- bun run --watch src/admin.ts",
     "devWindows": "@powershell -Command $env:DEBUG='bot*';dotenv -- -- bun run --watch src/index.ts",
-    "build": "ncc build src/index.ts -o public -m",
+    "build": "ncc build src/chat.ts -o public -m",
     "prettier": "prettier --write 'src/**/*.ts'",
     "lint": "tsc --noemit",
     "inspect:chat": "DEBUG=bot* dotenv -- node --inspect -r ts-node/register src/chat.ts"
