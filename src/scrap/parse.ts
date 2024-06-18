@@ -1,4 +1,4 @@
-import jmespath from 'jmespath';
+import * as jmespath from 'jmespath';
 
 /**
  * Parse Instagram user's hidden web dataset for user's data

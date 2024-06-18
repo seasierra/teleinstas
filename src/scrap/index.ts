@@ -1,11 +1,7 @@
 import * as querystring from 'querystring';
-import { ScrapeConfig, ScrapeResult, ScrapflyClient } from 'scrapfly-sdk';
+import { parsePost, parseUser } from './parse';
 
 const INSTAGRAM_APP_ID = '936619743392459'; // This is the public app ID for instagram.com
-
-const client = new ScrapflyClient({
-  key: process.env.SCRAPFLY_KEY || '',
-});
 
 const BASE_CONFIG = {
   asp: true,
@@ -15,31 +11,38 @@ const BASE_CONFIG = {
   },
 };
 
-const scrape = async (config: any): Promise<ScrapeResult> => {
-  const response = await client.scrape(
-    new ScrapeConfig({ ...BASE_CONFIG, ...config }),
+const SCRAPEDO_TOKEN = '332ff64103604aaabf91e9070adab46d917fb3672a5';
+
+const scrape = async (url: string) => {
+  const res = await fetch(
+    `https://api.scrape.do?token=${SCRAPEDO_TOKEN}&url=${encodeURIComponent(url)}`,
+    BASE_CONFIG,
   );
-  return JSON.parse(response.result.content);
+
+  return res.json();
 };
 
 interface User {
   id: string;
   username: string;
   full_name: string;
+  [x: string]: any;
   // Add other relevant fields
 }
 
 interface Post {
   id: string;
   shortcode: string;
+  [x: string]: any;
   // Add other relevant fields
 }
 
 export const getUser = async (username: string): Promise<User> => {
-  const { result } = await scrape({
-    url: `https://i.instagram.com/api/v1/users/web_profile_info/?username=${username}`,
-  });
-  return result?.data?.user;
+  const result = await scrape(
+    `https://i.instagram.com/api/v1/users/web_profile_info/?username=${username}`,
+  );
+
+  return parseUser(result?.data?.user);
 };
 
 export const getPost = async (shortcode: string): Promise<Post> => {
@@ -56,6 +59,7 @@ export const getPost = async (shortcode: string): Promise<Post> => {
 
   const query = querystring.escape(JSON.stringify(variables));
 
-  const { result } = await scrape({ url: url + query });
-  return result?.data?.post;
+  const result = await scrape(url + query);
+
+  return parsePost(result?.data?.shortcode_media);
 };
