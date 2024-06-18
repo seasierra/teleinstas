@@ -22,8 +22,6 @@ if (ENVIRONMENT === 'production') {
   ensureWebhook(bot);
 }
 
-const prompt = getFile('prompt.txt');
-
 let messages: ChatCompletionMessageParam[] = [];
 
 const msgIndex: Record<string, ChatCompletionMessageParam[]> = {};
