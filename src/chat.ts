@@ -3,14 +3,9 @@ import { message } from 'telegraf/filters';
 
 // import { sendAdmin } from './admin';
 
-import { kv } from '@vercel/kv';
-import { VercelRequest, VercelResponse } from '@vercel/node';
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources';
 import { development, production } from './core';
-import { ensureWebhook } from './core/webhook';
-import { getFile } from './utils';
-import moment = require('moment');
 
 const BOT_TOKEN = process.env.BOT_TOKEN || '';
 const ENVIRONMENT = process.env.NODE_ENV || '';
@@ -22,11 +17,6 @@ let messages: ChatCompletionMessageParam[] = [];
 
 const msgIndex: Record<string, ChatCompletionMessageParam[]> = {};
 
-const chatMsg = (id: string) => {
-  msgIndex[id] = msgIndex[id] || [];
-  return msgIndex[id];
-};
-
 bot.command('/start', (ctx) => {
   messages = [];
 });
@@ -34,40 +24,6 @@ bot.command('/start', (ctx) => {
 const threads: any = {};
 const runs: any = {};
 const cache: any = {};
-
-class MyCollection {
-  items: any[];
-  constructor() {
-    this.items = [];
-  }
-
-  add(item: any) {
-    this.items.push(item);
-  }
-
-  [Symbol.iterator]() {
-    let index = 0;
-    let items = this.items;
-
-    return {
-      next() {
-        if (index < items.length) {
-          return { value: items[index++], done: false };
-        } else {
-          return { done: true };
-        }
-      },
-    };
-  }
-}
-
-const fns = new MyCollection();
-
-const memo = (key: string, fn: Function) => {
-  if (cache[key]) return;
-
-  cache[key] = fn();
-};
 
 bot.on(message('text'), async (ctx) => {
   ctx.telegram.sendChatAction(ctx.chat.id, 'typing');
@@ -189,9 +145,10 @@ bot.on(message('text'), async (ctx) => {
 //   }
 // });
 
-//prod mode (Vercel)
-export const startVercel = async (req: VercelRequest, res: VercelResponse) => {
-  await production(req, res, bot);
-};
-//dev mode
-development(bot);
+if (process.env.NODE_ENV === 'production') {
+  production(bot);
+}
+
+if (process.env.NODE_ENV === 'development') {
+  development(bot);
+}
