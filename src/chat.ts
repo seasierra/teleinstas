@@ -1,11 +1,10 @@
 import { Markup, Telegraf } from 'telegraf';
 import { message } from 'telegraf/filters';
 
-// import { sendAdmin } from './admin';
-
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources';
 import { development, production } from './core';
+import { sendAdmin } from './admin';
 
 const BOT_TOKEN = process.env.BOT_TOKEN || '';
 const ENVIRONMENT = process.env.NODE_ENV || '';
@@ -28,7 +27,7 @@ const cache: any = {};
 bot.on(message('text'), async (ctx) => {
   ctx.telegram.sendChatAction(ctx.chat.id, 'typing');
 
-  // sendAdmin(ctx.message.text);
+  sendAdmin(ctx.message.text);
 
   if (!threads[ctx.chat.id]) {
     const thread = await openai.beta.threads.create();
@@ -63,11 +62,11 @@ bot.on(message('text'), async (ctx) => {
 
       console.log(list);
 
-      // sendAdmin(
-      //   `${text}
+      sendAdmin(
+        `${text}
 
-      //   /user_${ctx.from.username}_${ctx.chat.id}`,
-      // );
+        /user_${ctx.from.username}_${ctx.chat.id}`,
+      );
 
       ctx.reply(text);
     })
