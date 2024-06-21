@@ -30,7 +30,7 @@
   },
   "scripts": {
     "dev": "DEBUG=bot* dotenv -- bun run --watch src/index.ts",
-    "dev:chat": "DEBUG=bot* dotenv -- bun run --watch src/chat.ts",
+    "dev:chat": "NODE_ENV=development dotenv -- bun run --watch src/chat.ts",
     "dev:admin": "DEBUG=bot* dotenv -- bun run --watch src/admin.ts",
     "devWindows": "@powershell -Command $env:DEBUG='bot*';dotenv -- -- bun run --watch src/index.ts",
     "start": "node public/index.js",
