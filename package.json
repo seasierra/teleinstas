@@ -34,7 +34,7 @@
     "dev:admin": "DEBUG=bot* dotenv -- bun run --watch src/admin.ts",
     "devWindows": "@powershell -Command $env:DEBUG='bot*';dotenv -- -- bun run --watch src/index.ts",
     "start": "bun run src/chat.ts",
-    "start:adimin": "bun run src/admin.ts",
+    "start:admin": "bun run src/admin.ts",
     "prettier": "prettier --write 'src/**/*.ts'",
     "lint": "tsc --noemit",
     "inspect:chat": "DEBUG=bot* dotenv -- node --inspect -r ts-node/register src/chat.ts"
