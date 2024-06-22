@@ -33,9 +33,8 @@
     "dev:chat": "NODE_ENV=development dotenv -- bun run --watch src/chat.ts",
     "dev:admin": "DEBUG=bot* dotenv -- bun run --watch src/admin.ts",
     "devWindows": "@powershell -Command $env:DEBUG='bot*';dotenv -- -- bun run --watch src/index.ts",
-    "start": "node public/index.js",
-    "build": "ncc build src/chat.ts -o public -m",
-    "build:admin": "ncc build src/admin.ts -o public -m",
+    "start": "bun run src/chat.ts",
+    "start:adimin": "bun run src/admin.ts",
     "prettier": "prettier --write 'src/**/*.ts'",
     "lint": "tsc --noemit",
     "inspect:chat": "DEBUG=bot* dotenv -- node --inspect -r ts-node/register src/chat.ts"
